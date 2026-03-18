@@ -61,9 +61,9 @@ export const ValuationForm: React.FC = () => {
 
   return (
     <MotionWrapper>
-      <section id="contact" className="bg-eggshell py-28 lg:py-32">
+      <section id="contact" className="bg-eggshell py-32 lg:pb-40 scroll-mt-32">
         <div className="max-w-2xl mx-auto px-6">
-          <Card variant="default" className="space-y-8">
+          <Card id="valuation-form-card" variant="default" className="space-y-8">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold text-slate-900">Begin Your Professional Valuation</h2>
               <p className="text-lg text-slate-700">

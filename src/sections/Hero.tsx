@@ -33,13 +33,13 @@ export const Hero: React.FC<HeroProps> = ({ onRequestValuation }) => {
               </div>
             </div>
 
-            <div className="hidden lg:block">
-              <div className="bg-gradient-to-br from-slate-200 to-slate-100 rounded-lg aspect-square flex items-center justify-center border border-slate-300/50">
-                <div className="text-center">
-                  <p className="text-slate-500 text-lg font-medium">Premium Car Image</p>
-                  <p className="text-sm text-slate-400 mt-2">Clean dashboard or steering wheel</p>
-                </div>
-              </div>
+            <div className="hidden lg:block relative">
+              <div className="absolute -inset-4 bg-slate-200/50 rounded-full blur-3xl -z-10 animate-pulse-slow"></div>
+              <img
+                src="/src/assets/premium_car_hero.png"
+                alt="Premium Car"
+                className="rounded-2xl shadow-2xl border border-white/20 object-cover w-full h-auto transform hover:scale-[1.02] transition-transform duration-500"
+              />
             </div>
           </div>
         </div>

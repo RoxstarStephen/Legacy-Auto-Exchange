@@ -10,6 +10,7 @@ interface InputProps {
   disabled?: boolean;
   className?: string;
   prefix?: string;
+  name?: string;
   as?: 'input' | 'select';
   children?: React.ReactNode;
 }
@@ -24,6 +25,7 @@ export const Input: React.FC<InputProps> = ({
   disabled = false,
   className = '',
   prefix,
+  name,
   as = 'input',
   children,
 }) => {
@@ -49,6 +51,7 @@ export const Input: React.FC<InputProps> = ({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
+            name={name}
             required={required}
             disabled={disabled}
             className={`${baseStyles} ${prefix ? 'pl-12' : ''} ${className}`}
@@ -57,6 +60,7 @@ export const Input: React.FC<InputProps> = ({
           <select
             value={value}
             onChange={onChange}
+            name={name}
             required={required}
             disabled={disabled}
             className={`${baseStyles} ${className}`}

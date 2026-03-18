@@ -4,12 +4,14 @@ interface CardProps {
   children: React.ReactNode;
   className?: string;
   variant?: 'default' | 'elevated';
+  id?: string;
 }
 
 export const Card: React.FC<CardProps> = ({
   children,
   className = '',
   variant = 'default',
+  id,
 }) => {
   const baseStyles = 'rounded-lg p-6 transition-all duration-300';
   const variantStyles = {
@@ -18,7 +20,7 @@ export const Card: React.FC<CardProps> = ({
   };
 
   return (
-    <div className={`${baseStyles} ${variantStyles[variant]} ${className}`}>
+    <div id={id} className={`${baseStyles} ${variantStyles[variant]} ${className}`}>
       {children}
     </div>
   );

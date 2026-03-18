@@ -3,11 +3,11 @@ import React from 'react';
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-slate-blue text-eggshell">
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-6 py-10">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           <div className="space-y-2">
-            <h3 className="text-lg font-bold tracking-[0.2em]">LEGACY</h3>
-            <p className="text-sm text-eggshell/70">Professionalism and transparency in every transaction.</p>
+            <h3 className="text-2xl font-black text-white tracking-[0.2em] drop-shadow-sm">LEGACY</h3>
+            <p className="text-sm text-eggshell/80 font-medium">Professionalism and transparency in every transaction.</p>
           </div>
 
           <div className="space-y-4">

@@ -6,16 +6,12 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   const handleNavClick = (section: string) => {
-    const element = document.getElementById(section);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
     onNavigate?.(section);
   };
 
   return (
-    <header className="bg-eggshell border-b border-slate-200/40">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <header className="sticky top-0 z-50 bg-eggshell/80 backdrop-blur-md border-b border-slate-200/40 shadow-sm">
+      <div className="max-w-[1600px] mx-auto px-6 py-8">
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold text-slate-blue tracking-[0.2em]">LEGACY</h1>
