@@ -24,13 +24,15 @@ export const Accordion: React.FC<AccordionProps> = ({ items }) => {
       {items.map((item) => (
         <div
           key={item.id}
-          className="border border-slate-200/60 rounded-lg overflow-hidden hover:border-slate-300/60 transition-colors duration-200"
+          className="glass border border-white/20 rounded-2xl overflow-hidden hover:border-indigo-500/30 transition-all duration-300"
         >
           <button
             onClick={() => toggleItem(item.id)}
-            className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-slate-50/50 transition-colors duration-200"
+            className="w-full px-8 py-5 flex items-center justify-between text-left group"
           >
-            <h3 className="text-base font-medium text-slate-900 text-left">{item.question}</h3>
+            <h3 className="text-lg font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">
+              {item.question}
+            </h3>
             <motion.div
               animate={{ rotate: expandedId === item.id ? 180 : 0 }}
               transition={{ duration: 0.2 }}

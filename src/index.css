@@ -6,10 +6,49 @@
 
 @layer base {
   body {
-    @apply bg-eggshell font-outfit text-slate-700;
+    @apply bg-eggshell font-outfit text-slate-700 antialiased selection:bg-indigo-100 selection:text-indigo-900;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply text-slate-900 font-semibold;
+    @apply text-slate-900 font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+  
+  .glass-dark {
+    @apply bg-slate-900/40 backdrop-blur-md border border-white/10 shadow-2xl;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600;
+  }
+}
+
+@layer utilities {
+  .animate-pulse-slow {
+    animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-tilt {
+    animation: tilt 10s linear infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes tilt {
+    0%, 50%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(1deg); }
+    75% { transform: rotate(-1deg); }
   }
 }

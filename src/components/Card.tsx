@@ -3,7 +3,7 @@ import React from 'react';
 interface CardProps {
   children: React.ReactNode;
   className?: string;
-  variant?: 'default' | 'elevated';
+  variant?: 'default' | 'elevated' | 'glass';
   id?: string;
 }
 
@@ -13,10 +13,11 @@ export const Card: React.FC<CardProps> = ({
   variant = 'default',
   id,
 }) => {
-  const baseStyles = 'rounded-lg p-6 transition-all duration-300';
+  const baseStyles = 'rounded-2xl p-6 transition-all duration-500';
   const variantStyles = {
-    default: 'bg-white border border-slate-200/60 shadow-micro',
-    elevated: 'bg-white border border-slate-200/60 shadow-micro hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)]',
+    default: 'bg-white border border-slate-200/60 shadow-sm hover:shadow-md',
+    elevated: 'bg-white border border-slate-200/60 shadow-md hover:shadow-xl hover:-translate-y-1',
+    glass: 'glass hover:bg-white/80 hover:shadow-2xl hover:-translate-y-1',
   };
 
   return (

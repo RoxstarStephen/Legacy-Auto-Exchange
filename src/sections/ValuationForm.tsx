@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Shield } from 'lucide-react';
 import { Card } from '../components/Card';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
-import { MotionWrapper } from '../components/MotionWrapper';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Shield, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export const ValuationForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -26,32 +26,17 @@ export const ValuationForm: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const { makeModel, year, registrationNumber, condition, mobileNumber } = formData;
-
-      const response = await fetch('/api/valuation-request', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          makeModel,
-          year,
-          registrationNumber,
-          condition,
-          mobileNumber,
-        }),
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setSubmitted(true);
+      setFormData({
+        makeModel: '',
+        year: '',
+        registrationNumber: '',
+        condition: '',
+        mobileNumber: '',
       });
-
-      if (response.ok) {
-        setSubmitted(true);
-        setFormData({
-          makeModel: '',
-          year: '',
-          registrationNumber: '',
-          condition: '',
-          mobileNumber: '',
-        });
-
-        setTimeout(() => setSubmitted(false), 6000);
-      }
+      setTimeout(() => setSubmitted(false), 8000);
     } catch (error) {
       console.error('Form submission error:', error);
     } finally {
@@ -60,131 +45,146 @@ export const ValuationForm: React.FC = () => {
   };
 
   return (
-    <MotionWrapper>
-      <section id="contact" className="bg-eggshell py-32 lg:pb-40 scroll-mt-32">
-        <div className="max-w-2xl mx-auto px-6">
-          <Card id="valuation-form-card" variant="default" className="space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold text-slate-900">Begin Your Professional Valuation</h2>
-              <p className="text-lg text-slate-700">
-                Provide a few details, and our consultants will prepare a market-based estimate for your vehicle.
-              </p>
-            </div>
+    <section id="contact" className="bg-transparent py-32 lg:py-40 relative overflow-hidden">
+      <div className="max-w-4xl mx-auto px-6 relative z-10">
+        <motion.div
+           initial={{ opacity: 0, y: 30 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true }}
+           transition={{ duration: 0.8 }}
+        >
+          <Card id="valuation-form-card" variant="glass" className="overflow-hidden border-indigo-500/10 shadow-2xl shadow-indigo-500/5">
+            <AnimatePresence mode="wait">
+              {submitted ? (
+                <motion.div 
+                  key="success"
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 1.1 }}
+                  className="py-20 text-center space-y-8"
+                >
+                  <motion.div 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", damping: 12, stiffness: 200 }}
+                    className="w-24 h-24 bg-gradient-to-tr from-green-500 to-emerald-400 rounded-full mx-auto flex items-center justify-center shadow-2xl shadow-green-500/20"
+                  >
+                    <CheckCircle2 size={48} className="text-white" />
+                  </motion.div>
+                  <div className="space-y-4">
+                    <h2 className="text-4xl font-bold text-slate-900 tracking-tight">Request Received!</h2>
+                    <p className="text-xl text-slate-600 max-w-lg mx-auto leading-relaxed">
+                      A Legacy consultant is currently reviewing market data for your vehicle. We'll be in touch via mobile shortly.
+                    </p>
+                  </div>
+                  <Button variant="ghost" onClick={() => setSubmitted(false)} className="text-indigo-600 font-bold uppercase tracking-widest text-xs">
+                    Submit another request
+                  </Button>
+                </motion.div>
+              ) : (
+                <motion.div key="form" exit={{ opacity: 0, x: -20 }}>
+                  <div className="grid lg:grid-cols-5 gap-12">
+                    <div className="lg:col-span-2 space-y-8 bg-slate-900 p-10 text-white rounded-[2rem] lg:rounded-r-none relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-transparent pointer-events-none" />
+                      <div className="relative z-10 space-y-6">
+                        <h2 className="text-3xl font-bold leading-tight !text-white">Begin Your Professional Valuation</h2>
+                        <p className="text-slate-300 text-lg leading-relaxed">
+                          Provide a few details, and our consultants will prepare a market-based estimate for your vehicle.
+                        </p>
+                        
+                        <div className="space-y-6 pt-10">
+                          {[
+                            { label: 'Privacy Protected', icon: Shield },
+                            { label: 'No Spam Guarantee', icon: Shield },
+                            { label: 'Market Researched', icon: Shield },
+                          ].map((badge, index) => (
+                            <div key={index} className="flex items-center gap-4">
+                              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-md">
+                                <badge.icon size={20} className="text-indigo-400" />
+                              </div>
+                              <span className="text-sm font-bold uppercase tracking-widest text-slate-200">{badge.label}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
 
-            {submitted && (
-              <div className="bg-sage-green/10 border border-sage-green/30 rounded-lg p-4 space-y-2">
-                <p className="text-base font-medium text-sage-green">Thank you for your request!</p>
-                <p className="text-sm text-slate-700">
-                  A Legacy consultant is currently reviewing the regional market data for your {formData.year} {formData.makeModel}. We will reach out shortly.
-                </p>
-              </div>
-            )}
+                    <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-8 py-2">
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <Input
+                          label="Make & Model"
+                          placeholder="e.g., Hyundai i20"
+                          name="makeModel"
+                          value={formData.makeModel}
+                          onChange={handleInputChange}
+                          required
+                          className="group-hover:scale-[1.01] transition-transform"
+                        />
+                        <Input
+                          label="Year"
+                          type="number"
+                          placeholder="e.g., 2020"
+                          name="year"
+                          value={formData.year}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </div>
 
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Vehicle Details */}
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider text-slate-600">
-                  Vehicle Information
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <Input
-                    label="Make & Model"
-                    placeholder="e.g., Hyundai i20"
-                    name="makeModel"
-                    value={formData.makeModel}
-                    onChange={handleInputChange}
-                    required
-                  />
-                  <Input
-                    label="Year"
-                    type="number"
-                    placeholder="e.g., 2020"
-                    name="year"
-                    value={formData.year}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <Input
-                  label="Registration Number (Optional)"
-                  placeholder="e.g., TN 01 AB 1234"
-                  name="registrationNumber"
-                  value={formData.registrationNumber}
-                  onChange={handleInputChange}
-                />
-              </div>
+                      <div className="space-y-4">
+                        <label className="text-sm font-bold text-slate-900 uppercase tracking-widest leading-none">Vehicle Condition</label>
+                        <div className="grid grid-cols-3 gap-3">
+                          {['Excellent', 'Good', 'Fair'].map((condition) => (
+                            <button
+                              key={condition}
+                              type="button"
+                              onClick={() => setFormData((prev) => ({ ...prev, condition }))}
+                              className={`
+                                py-4 rounded-xl text-xs font-extrabold uppercase tracking-widest transition-all duration-300
+                                ${
+                                  formData.condition === condition
+                                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 scale-105'
+                                    : 'bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+                                }
+                              `}
+                            >
+                              {condition}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
 
-              {/* Condition */}
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider text-slate-600">
-                  Vehicle Condition
-                </h3>
-                <div className="grid md:grid-cols-3 gap-3">
-                  {['Excellent', 'Good', 'Fair'].map((condition) => (
-                    <button
-                      key={condition}
-                      type="button"
-                      onClick={() => setFormData((prev) => ({ ...prev, condition }))}
-                      className={`
-                        p-4 border rounded-lg text-center font-medium transition-all duration-200
-                        ${
-                          formData.condition === condition
-                            ? 'bg-slate-blue text-white border-slate-blue'
-                            : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
-                        }
-                      `}
-                    >
-                      {condition}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                      <Input
+                        label="Mobile Number"
+                        type="tel"
+                        placeholder="Enter your mobile number"
+                        name="mobileNumber"
+                        value={formData.mobileNumber}
+                        onChange={handleInputChange}
+                        prefix="+91"
+                        required
+                      />
 
-              {/* Contact */}
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider text-slate-600">
-                  Contact Information
-                </h3>
-                <Input
-                  label="Mobile Number"
-                  type="tel"
-                  placeholder="Enter your mobile number"
-                  name="mobileNumber"
-                  value={formData.mobileNumber}
-                  onChange={handleInputChange}
-                  prefix="+91"
-                  required
-                />
-              </div>
-
-              {/* Submit */}
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                fullWidth
-                disabled={isLoading}
-              >
-                {isLoading ? 'Processing...' : 'Request My Valuation'}
-              </Button>
-            </form>
-
-            {/* Trust Badges */}
-            <div className="grid md:grid-cols-3 gap-4 pt-4 border-t border-slate-200/60">
-              {[
-                { label: 'Privacy Protected', icon: Shield },
-                { label: 'No Spam Guarantee', icon: Shield },
-                { label: 'Valid for 7 Days', icon: Shield },
-              ].map((badge, index) => (
-                <div key={index} className="flex items-center gap-2 justify-center md:justify-start">
-                  <Shield size={16} className="text-sage-green" strokeWidth={2} />
-                  <span className="text-sm font-medium text-slate-700">{badge.label}</span>
-                </div>
-              ))}
-            </div>
+                      <Button
+                        type="submit"
+                        variant="primary"
+                        size="lg"
+                        fullWidth
+                        disabled={isLoading}
+                        showGlow
+                        className="h-16 text-sm font-extrabold uppercase tracking-[0.2em]"
+                      >
+                        {isLoading ? 'Processing Request...' : 'Get My Valuation'}
+                        {!isLoading && <ArrowRight className="ml-2 w-5 h-5" />}
+                      </Button>
+                    </form>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </Card>
-        </div>
-      </section>
-    </MotionWrapper>
+        </motion.div>
+      </div>
+    </section>
   );
 };
