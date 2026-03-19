@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useSound } from '../hooks/useSound';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -27,6 +28,7 @@ export const Button: React.FC<ButtonProps> = ({
   magnetic = true,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const { playHoverSound, playClickSound } = useSound();
   
   // Magnetic effect values
   const mouseX = useMotionValue(0);
@@ -82,8 +84,14 @@ export const Button: React.FC<ButtonProps> = ({
     <motion.button
       ref={buttonRef}
       type={type}
-      onClick={onClick}
+      onClick={() => {
+        if (!disabled) playClickSound();
+        if (onClick) onClick();
+      }}
       onMouseMove={handleMouseMove}
+      onMouseEnter={() => {
+        if (!disabled) playHoverSound();
+      }}
       onMouseLeave={handleMouseLeave}
       disabled={disabled}
       style={{

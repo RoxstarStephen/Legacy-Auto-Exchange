@@ -84,6 +84,7 @@ export const FAQ: React.FC = () => {
             <input 
               type="text" 
               placeholder="Search questions..."
+              aria-label="Search frequently asked questions"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-6 py-4 bg-white/50 backdrop-blur-md border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all shadow-sm"
@@ -119,6 +120,7 @@ export const FAQ: React.FC = () => {
                 <Card variant="glass" className="p-0 overflow-hidden border-slate-100 hover:border-indigo-200/50 transition-colors">
                   <button 
                     onClick={() => setOpenId(openId === item.id ? null : item.id)}
+                    aria-expanded={openId === item.id}
                     className="w-full p-6 text-left flex items-center justify-between group"
                   >
                     <div className="flex items-center space-x-4">

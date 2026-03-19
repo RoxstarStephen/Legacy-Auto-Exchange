@@ -114,14 +114,14 @@ export const Testimonials: React.FC = () => {
                   </p>
 
                   <div className="space-y-4 relative z-10">
-                    <div className="flex justify-center space-x-2">
+                    <div className="flex justify-center space-x-2" aria-label={`Rating: ${testimonials[currentIndex].rating} out of 5 stars`}>
                       {[1, 2, 3, 4, 5].map(star => (
                         <motion.div
                           key={star}
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{ delay: 0.5 + star * 0.1 }}
-                          className="w-5 h-5 bg-indigo-500 rounded-full"
+                          className={`w-5 h-5 rounded-full ${star <= testimonials[currentIndex].rating ? 'bg-indigo-500' : 'bg-slate-200'}`}
                         />
                       ))}
                     </div>
@@ -138,14 +138,18 @@ export const Testimonials: React.FC = () => {
           <div className="flex justify-center items-center space-x-8 mt-12">
             <button 
               onClick={prev}
+              aria-label="Previous testimonial"
               className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all hover:scale-110 active:scale-95"
             >
               ←
             </button>
-            <div className="flex space-x-3">
+            <div className="flex space-x-3" role="tablist" aria-label="Testimonial selection">
               {testimonials.map((_, i) => (
                 <button
                   key={i}
+                  role="tab"
+                  aria-selected={i === currentIndex}
+                  aria-label={`Go to testimonial ${i + 1}`}
                   onClick={() => setCurrentIndex(i)}
                   className={`h-2 rounded-full transition-all duration-500 ${i === currentIndex ? 'w-10 bg-indigo-600' : 'w-2 bg-slate-300'}`}
                 />
@@ -153,6 +157,7 @@ export const Testimonials: React.FC = () => {
             </div>
             <button 
               onClick={next}
+              aria-label="Next testimonial"
               className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all hover:scale-110 active:scale-95"
             >
               →

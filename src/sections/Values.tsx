@@ -46,13 +46,13 @@ export const Values: React.FC = () => {
   };
 
   return (
-    <section id="values" className="bg-transparent py-40 lg:py-60 relative">
-      <div className="max-w-[1400px] mx-auto px-10">
-        <div className="text-center space-y-8 mb-32">
-          <div className="space-y-6">
+    <section id="values" className="bg-transparent py-24 lg:py-60 relative">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+        <div className="text-center space-y-6 lg:space-y-8 mb-16 lg:mb-32">
+          <div className="space-y-4 lg:space-y-6">
             <SplitText 
               text="Our Core Values" 
-              className="text-5xl md:text-7xl font-black text-slate-900 justify-center tracking-tighter"
+              className="text-4xl lg:text-7xl font-black text-slate-900 justify-center tracking-tighter"
             />
             <motion.div 
               initial={{ scaleX: 0 }}
@@ -78,17 +78,18 @@ export const Values: React.FC = () => {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
-          className="grid md:grid-cols-3 gap-12 lg:gap-20"
+          className="grid md:grid-cols-3 gap-8 lg:gap-20"
         >
           {pillars.map((pillar) => {
             const Icon = pillar.icon;
             return (
               <motion.div key={pillar.id} variants={item}>
                 <MotionWrapper type="tilt" className="h-full">
-                  <Card variant="glass" className="h-full p-10 lg:p-12 group hover:border-indigo-500/30 transition-all duration-700 rounded-[3rem]">
-                    <div className="flex flex-col space-y-10">
-                      <div className={`relative inline-flex items-center justify-center w-20 h-20 ${pillar.color} rounded-[2rem] group-hover:scale-110 group-hover:rotate-6 transition-all duration-700 shadow-xl shadow-indigo-500/5`}>
-                        <Icon size={40} strokeWidth={1.5} />
+                  <Card variant="glass" className="h-full p-8 lg:p-12 group hover:border-indigo-500/30 transition-all duration-700 rounded-[2rem] lg:rounded-[3rem]">
+                    <div className="flex flex-col space-y-8 lg:space-y-10">
+                      <div className={`relative inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 ${pillar.color} rounded-2xl lg:rounded-[2rem] group-hover:scale-110 group-hover:rotate-6 transition-all duration-700 shadow-xl shadow-indigo-500/5`}>
+                        <Icon size={32} strokeWidth={1.5} className="lg:hidden" />
+                        <Icon size={40} strokeWidth={1.5} className="hidden lg:block" />
                         <motion.div 
                           className="absolute -inset-4 bg-inherit rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-30 transition-opacity"
                           animate={{ scale: [1, 1.2, 1] }}

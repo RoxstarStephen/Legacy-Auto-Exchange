@@ -33,12 +33,17 @@ html.lenis, html.lenis body {
 
 @layer base {
   body {
-    @apply bg-[#fafafa] text-slate-900 antialiased selection:bg-indigo-100 selection:text-indigo-900;
-    font-weight: 450;
+    @apply bg-[#fafafa] text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900;
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply text-slate-900 font-semibold tracking-tight;
+    @apply text-slate-900 font-bold tracking-tighter;
+  }
+
+  p {
+    @apply leading-relaxed;
   }
 }
 

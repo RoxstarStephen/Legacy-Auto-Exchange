@@ -135,13 +135,15 @@ export const ValuationForm: React.FC = () => {
                         />
                       </div>
 
-                      <div className="space-y-4">
-                        <label className="text-sm font-bold text-slate-900 uppercase tracking-widest leading-none">Vehicle Condition</label>
-                        <div className="grid grid-cols-3 gap-3">
+                      <fieldset className="space-y-4">
+                        <legend className="text-sm font-bold text-slate-900 uppercase tracking-widest leading-none">Vehicle Condition</legend>
+                        <div className="grid grid-cols-3 gap-3" role="radiogroup" aria-label="Vehicle Condition">
                           {['Excellent', 'Good', 'Fair'].map((condition) => (
                             <button
                               key={condition}
                               type="button"
+                              role="radio"
+                              aria-checked={formData.condition === condition}
                               onClick={() => setFormData((prev) => ({ ...prev, condition }))}
                               className={`
                                 py-4 rounded-xl text-xs font-extrabold uppercase tracking-widest transition-all duration-300
@@ -156,7 +158,7 @@ export const ValuationForm: React.FC = () => {
                             </button>
                           ))}
                         </div>
-                      </div>
+                      </fieldset>
 
                       <Input
                         label="Mobile Number"

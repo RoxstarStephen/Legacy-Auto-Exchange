@@ -42,7 +42,11 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
 
       <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <motion.div 
+          role="button"
+          aria-label="Legacy Home"
+          tabIndex={0}
           onClick={() => onNavigate('hero')}
+          onKeyDown={(e) => e.key === 'Enter' && onNavigate('hero')}
           className="flex items-center space-x-3 cursor-pointer group relative"
           data-cursor-text="HOME"
         >
@@ -96,8 +100,10 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
         </div>
 
         <button 
-          className="md:hidden p-2 text-slate-900"
+          className="md:hidden p-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-lg"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
         >
           {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>

@@ -34,8 +34,8 @@ const StatCounter: React.FC<{ value: number; label: string; suffix?: string }> =
   }, [value, isInView]);
 
   return (
-    <div ref={ref} className="flex flex-col space-y-2 group">
-      <div className="text-4xl lg:text-5xl font-black text-slate-900 group-hover:text-indigo-600 transition-all duration-500 tracking-tighter">
+    <div ref={ref} className="flex flex-col space-y-2 group" aria-label={`${value}${suffix} ${label}`}>
+      <div className="text-4xl lg:text-5xl font-black text-slate-900 group-hover:text-indigo-600 transition-all duration-500 tracking-tighter" aria-hidden="true">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -44,7 +44,7 @@ const StatCounter: React.FC<{ value: number; label: string; suffix?: string }> =
         </motion.span>
         <span className="text-indigo-500 ml-1">{suffix}</span>
       </div>
-      <div className="text-xs font-black uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-900 transition-colors duration-500">
+      <div className="text-xs font-black uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-900 transition-colors duration-500" aria-hidden="true">
         {label}
       </div>
       <motion.div 
@@ -52,6 +52,7 @@ const StatCounter: React.FC<{ value: number; label: string; suffix?: string }> =
         initial={{ scaleX: 0 }}
         animate={isInView ? { scaleX: 1 } : {}}
         transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
+        aria-hidden="true"
       />
     </div>
   );
