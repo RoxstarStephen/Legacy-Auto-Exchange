@@ -4,6 +4,7 @@ import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, CheckCircle2, ArrowRight } from 'lucide-react';
+import { SplitText } from '../components/SplitText';
 
 export const ValuationForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -87,7 +88,10 @@ export const ValuationForm: React.FC = () => {
                     <div className="lg:col-span-2 space-y-8 bg-slate-900 p-10 text-white rounded-[2rem] lg:rounded-r-none relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-transparent pointer-events-none" />
                       <div className="relative z-10 space-y-6">
-                        <h2 className="text-3xl font-bold leading-tight !text-white">Begin Your Professional Valuation</h2>
+                        <SplitText 
+                          text="Begin Your Professional Valuation" 
+                          className="text-3xl font-bold leading-tight text-white"
+                        />
                         <p className="text-slate-300 text-lg leading-relaxed">
                           Provide a few details, and our consultants will prepare a market-based estimate for your vehicle.
                         </p>
@@ -172,6 +176,8 @@ export const ValuationForm: React.FC = () => {
                         fullWidth
                         disabled={isLoading}
                         showGlow
+                        magnetic
+                        data-cursor-text="SEND"
                         className="h-16 text-sm font-extrabold uppercase tracking-[0.2em]"
                       >
                         {isLoading ? 'Processing Request...' : 'Get My Valuation'}

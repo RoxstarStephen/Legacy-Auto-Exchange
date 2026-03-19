@@ -2,6 +2,7 @@ import React from 'react';
 import { Quote } from 'lucide-react';
 import { Card } from '../components/Card';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SplitText } from '../components/SplitText';
 
 const SkeletonCard = () => (
   <Card variant="glass" className="h-[250px] animate-pulse">
@@ -63,18 +64,28 @@ export const Testimonials: React.FC = () => {
     <section id="testimonials" className="bg-transparent py-28 lg:py-40 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center space-y-4 mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 tracking-tight">The Experience of Others</h2>
-            <div className="w-20 h-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 mx-auto rounded-full mb-6" />
-            <p className="text-lg md:text-xl text-slate-700 max-w-2xl mx-auto leading-relaxed">
+          <div className="space-y-4">
+            <SplitText 
+              text="The Experience of Others" 
+              className="text-4xl md:text-5xl font-bold text-slate-900 justify-center tracking-tight"
+            />
+            <motion.div 
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="w-20 h-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 mx-auto rounded-full mb-6 origin-center" 
+            />
+            <motion.p 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="text-lg md:text-xl text-slate-700 max-w-2xl mx-auto leading-relaxed"
+            >
               Legacy is built on long-term trust and professional transparency across Tamil Nadu.
-            </p>
-          </motion.div>
+            </motion.p>
+          </div>
         </div>
 
         <div className="relative max-w-4xl mx-auto">

@@ -1,113 +1,169 @@
-import React from 'react';
-import { Car, BarChart3, Handshake } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Card } from '../components/Card';
+import React, { useRef } from 'react';
+import { Search, ClipboardCheck, Wallet, FileCheck, LucideIcon } from 'lucide-react';
+import { motion, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
+import { SplitText } from '../components/SplitText';
 
-export const Process: React.FC = () => {
-  const steps = [
-    {
-      id: 1,
-      icon: Car,
-      title: 'Share Basic Details',
-      description: 'Tell us about your car—model, year, mileage, and condition—through our simple request.',
-      color: 'bg-blue-500/10 text-blue-600',
-    },
-    {
-      id: 2,
-      icon: BarChart3,
-      title: 'Get a Fair Estimate',
-      description: 'We analyze current Tamil Nadu market data to provide you with a transparent, researched price range.',
-      color: 'bg-indigo-500/10 text-indigo-600',
-    },
-    {
-      id: 3,
-      icon: Handshake,
-      title: 'Respectful Handover',
-      description: 'Finalize the sale at your convenience, with complete transparency and immediate payment upon verification.',
-      color: 'bg-purple-500/10 text-purple-600',
-    },
-  ];
+interface Step {
+  id: number;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  color: string;
+}
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
+const steps: Step[] = [
+  {
+    id: 1,
+    title: 'Digital Consultation',
+    description: 'Begin with a market-based valuation through our professional portal. No generic estimates—just data-driven insights.',
+    icon: Search,
+    color: 'from-blue-500 to-indigo-600',
+  },
+  {
+    id: 2,
+    title: 'Physical Verification',
+    description: 'Our consultants visit you at your convenience. A respectful 30-minute inspection to confirm vehicle condition.',
+    icon: ClipboardCheck,
+    color: 'from-indigo-600 to-violet-600',
+  },
+  {
+    id: 3,
+    title: 'Settlement',
+    description: 'Immediate document handover and digital payment. No waiting, no uncertainty. A clean, rapid closure.',
+    icon: Wallet,
+    color: 'from-violet-600 to-purple-600',
+  },
+  {
+    id: 4,
+    title: 'RC Transfer',
+    description: 'We handle the complete RTO documentation flow. Full legal liability transfer with real-time status updates.',
+    icon: FileCheck,
+    color: 'from-purple-600 to-fuchsia-600',
+  },
+];
 
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.8 } },
-  };
-
-  const { scrollYProgress } = useScroll();
-  const pathLength = useTransform(scrollYProgress, [0.1, 0.4], [0, 1]);
+const StepIndicator: React.FC<{ step: Step; index: number; progress: MotionValue<number>; total: number }> = ({ step, index, progress, total }) => {
+  const transitions = total - 1;
+  const domain = Array.from({ length: total }).map((_, i) => i / transitions);
+  
+  let indicatorDomain, indicatorActiveY;
+  if (index === 0) {
+    indicatorDomain = [0, 1];
+    indicatorActiveY = [1, 1];
+  } else {
+    indicatorDomain = [(index - 1) / transitions, index / transitions];
+    indicatorActiveY = [0, 1];
+  }
+  const activeY = useTransform(progress, indicatorDomain, indicatorActiveY);
+  
+  const colorValues: string[] = domain.map((_, i) => {
+    if (i === index) return 'rgba(79, 70, 229, 1)'; // indigo-600
+    if (i < index) return 'rgba(79, 70, 229, 0.4)'; // past
+    return 'rgba(148, 163, 184, 1)'; // future (slate-400)
+  });
+  const color = useTransform(progress, domain, colorValues);
+  
+  const scaleValues: number[] = domain.map((_, i) => (i === index ? 1.1 : 1.0));
+  const scale = useSpring(useTransform(progress, domain, scaleValues), { stiffness: 400, damping: 30 });
 
   return (
-    <section id="process" className="bg-transparent py-28 lg:py-40 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center space-y-4 mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 tracking-tight">The Simple Path</h2>
-            <div className="w-20 h-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 mx-auto rounded-full mb-6" />
-            <p className="text-lg md:text-xl text-slate-700 max-w-2xl mx-auto leading-relaxed">
-              Three straightforward steps to a fair, transparent sale of your vehicle.
-            </p>
-          </motion.div>
+    <motion.div style={{ scale }} className="flex items-center space-x-6 group cursor-default">
+      <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center font-black relative overflow-hidden transition-colors duration-300">
+        <span className="relative z-10 mix-blend-difference text-white">0{step.id}</span>
+        <motion.div className="absolute inset-0 bg-indigo-600 origin-bottom" style={{ scaleY: activeY }} />
+      </div>
+      <motion.h4 className="text-lg font-black uppercase tracking-widest" style={{ color }}>
+        {step.title}
+      </motion.h4>
+    </motion.div>
+  );
+};
+
+const StepCard: React.FC<{ step: Step; index: number; progress: MotionValue<number>; total: number }> = ({ step, index, progress, total }) => {
+  const transitions = total - 1;
+  const domain = Array.from({ length: total }).map((_, i) => i / transitions);
+  
+  const yValues: number[] = domain.map((_, i) => {
+    if (i < index) return 400; // Slide up from below
+    return 0; // Stays at 0 when active and afterwards
+  });
+
+  const opacityValues: number[] = domain.map((_, i) => {
+    if (i < index) return 0; // Wait to appear
+    if (i === index) return 1; // Fully visible
+    return Math.max(0, 1 - (i - index) * 0.4); // Darken as it gets covered
+  });
+
+  const scaleValues: number[] = domain.map((_, i) => {
+    if (i < index) return 1;
+    if (i === index) return 1;
+    return 1 - (i - index) * 0.05; // Scale down slightly when covered
+  });
+
+  const y = useSpring(useTransform(progress, domain, yValues), { stiffness: 100, damping: 20 });
+  const opacity = useTransform(progress, domain, opacityValues);
+  const scale = useTransform(progress, domain, scaleValues);
+  
+  const Icon = step.icon;
+
+  return (
+    <motion.div
+      style={{ opacity, y, scale, zIndex: index + 1 }}
+      className="absolute inset-0 flex flex-col justify-center p-16 bg-white rounded-[4rem] shadow-[-20px_40px_80px_rgba(0,0,0,0.08)] border border-slate-100/50"
+    >
+      <div className={`w-24 h-24 bg-gradient-to-br ${step.color} rounded-[2rem] flex items-center justify-center text-white mb-10 shadow-2xl shadow-indigo-500/10`}>
+        <Icon size={48} strokeWidth={1.2} />
+      </div>
+      <div className="space-y-6">
+        <h3 className="text-4xl font-black text-slate-900 tracking-tighter">{step.title}</h3>
+        <p className="text-2xl text-slate-500 leading-relaxed font-medium">{step.description}</p>
+      </div>
+    </motion.div>
+  );
+};
+
+export const Process: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 2]);
+  const bgOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+
+  return (
+    <section id="process" ref={containerRef} className="relative min-h-[400vh] bg-transparent pb-32">
+      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+        <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none">
+          <motion.h2 style={{ scale: bgScale, opacity: bgOpacity }} className="text-[30vw] font-black tracking-tighter">
+            LEGACY
+          </motion.h2>
         </div>
 
-        <div className="relative">
-          {/* Animated connector lines */}
-          <div className="hidden md:block absolute top-[4.5rem] left-[15%] right-[15%] h-px overflow-hidden">
-            <motion.div 
-              className="w-full h-full bg-gradient-to-r from-indigo-500/20 via-indigo-500 to-indigo-500/20"
-              style={{ scaleX: pathLength, originX: 0 }}
-            />
-          </div>
+        <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <div className="space-y-16">
+              <div className="space-y-6">
+                <SplitText text="The Legacy Process" className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter" />
+                <p className="text-xl text-slate-600 max-w-lg leading-relaxed font-medium">
+                  Four steps to a professional, grounded, and seamless vehicle transition.
+                </p>
+              </div>
 
-          <motion.div 
-            variants={container}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
-            className="grid md:grid-cols-3 gap-12"
-          >
-            {steps.map((step) => {
-              const Icon = step.icon;
-              return (
-                <motion.div key={step.id} variants={item} className="relative z-10">
-                  <Card variant="glass" className="h-full group hover:border-indigo-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/10">
-                    <div className="flex flex-col space-y-8">
-                      <div className={`relative inline-flex items-center justify-center w-20 h-20 ${step.color} rounded-3xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
-                        <Icon size={36} strokeWidth={1.5} />
-                        <div className="absolute -inset-2 bg-inherit rounded-3xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity" />
-                      </div>
-                      <div className="space-y-4">
-                        <div className="flex items-center space-x-3">
-                          <span className="text-sm font-bold text-indigo-600/50 uppercase tracking-widest">Step 0{step.id}</span>
-                          <div className="flex-grow h-px bg-indigo-100/50" />
-                        </div>
-                        <h3 className="text-2xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors duration-300">
-                          {step.title}
-                        </h3>
-                        <p className="text-base text-slate-600 leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
-                          {step.description}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+              <div className="space-y-8 max-w-md">
+                {steps.map((step, i) => (
+                  <StepIndicator key={step.id} step={step} index={i} progress={scrollYProgress} total={steps.length} />
+                ))}
+              </div>
+            </div>
+
+            <div className="relative h-[600px] flex items-center perspective-2000">
+              {steps.map((step, i) => (
+                <StepCard key={step.id} step={step} index={i} progress={scrollYProgress} total={steps.length} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

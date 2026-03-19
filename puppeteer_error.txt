@@ -1,0 +1,37 @@
+PAGE_ERROR: TypeError: Failed to execute 'animate' on 'Element': Offsets must be monotonically non-decreasing.
+PAGE_ERROR: TypeError: Failed to execute 'animate' on 'Element': Offsets must be null or in the range [0,1].
+CONSOLE_ERROR: The above error occurred in the <div> component:
+
+    at div
+    at MotionDOMComponent (http://localhost:5173/node_modules/.vite/deps/framer-motion.js?v=b8f4911e:8882:40)
+    at StepCard (http://localhost:5173/src/sections/Process.tsx:102:21)
+    at div
+    at div
+    at div
+    at div
+    at section
+    at Process (http://localhost:5173/src/sections/Process.tsx:164:24)
+    at main
+    at div
+    at App (http://localhost:5173/src/App.tsx:152:20)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+CONSOLE_ERROR: The above error occurred in the <div> component:
+
+    at div
+    at MotionDOMComponent (http://localhost:5173/node_modules/.vite/deps/framer-motion.js?v=b8f4911e:8882:40)
+    at StepCard (http://localhost:5173/src/sections/Process.tsx:102:21)
+    at div
+    at div
+    at div
+    at div
+    at section
+    at Process (http://localhost:5173/src/sections/Process.tsx:164:24)
+    at main
+    at div
+    at App (http://localhost:5173/src/App.tsx:152:20)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+PAGE_ERROR: TypeError: Failed to execute 'animate' on 'Element': Offsets must be monotonically non-decreasing.

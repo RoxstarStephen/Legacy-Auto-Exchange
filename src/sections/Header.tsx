@@ -43,16 +43,29 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
       <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <motion.div 
           onClick={() => onNavigate('hero')}
-          className="flex items-center space-x-3 cursor-pointer group"
+          className="flex items-center space-x-3 cursor-pointer group relative"
+          data-cursor-text="HOME"
         >
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-6 transition-transform">
-            <span className="text-white font-black text-xl">L</span>
+          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-6 transition-transform relative overflow-hidden">
+            <span className="text-white font-black text-xl relative z-10">L</span>
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-12 translate-x-[-150%]"
+              animate={{ translateX: ['150%', '-150%'] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3, ease: "linear" }}
+            />
           </div>
-          <span className={`text-2xl font-black tracking-[0.2em] transition-colors duration-500 ${
-            scrolled ? 'text-slate-900' : 'text-indigo-600 font-extrabold'
-          }`}>
-            LEGACY
-          </span>
+          <div className="relative overflow-hidden group">
+            <span className={`text-2xl font-black tracking-[0.2em] transition-colors duration-500 relative z-10 ${
+              scrolled ? 'text-slate-900' : 'text-indigo-600 font-extrabold'
+            }`}>
+              LEGACY
+            </span>
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-400/20 to-transparent -skew-x-12 translate-x-[-150%] pointer-events-none"
+              animate={{ translateX: ['150%', '-150%'] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3.2, ease: "linear" }}
+            />
+          </div>
         </motion.div>
 
         <div className="hidden md:flex items-center space-x-10">
@@ -60,6 +73,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
+              data-cursor-text="GO"
               className="text-sm font-bold uppercase tracking-widest text-slate-600 hover:text-indigo-600 transition-colors relative group"
             >
               {item.name}
@@ -73,6 +87,8 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
             variant="primary" 
             size="md" 
             showGlow
+            magnetic
+            data-cursor-text="QUOTE"
             onClick={() => onNavigate('contact')}
           >
             Get Quote

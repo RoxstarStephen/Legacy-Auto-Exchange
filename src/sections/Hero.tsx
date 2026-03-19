@@ -1,40 +1,69 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import { Button } from '../components/Button';
-import { ChevronDown } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { SplitText } from '../components/SplitText';
+import { MotionWrapper } from '../components/MotionWrapper';
 
 interface HeroProps {
   onRequestValuation?: (id?: string) => void;
 }
 
+import { useInView } from 'framer-motion';
+
 const StatCounter: React.FC<{ value: number; label: string; suffix?: string }> = ({ value, label, suffix = "" }) => {
   const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   useEffect(() => {
-    let startTime: number;
-    const duration = 2000;
-    const step = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      setCount(Math.floor(progress * value));
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      }
-    };
-    window.requestAnimationFrame(step);
-  }, [value]);
+    if (isInView) {
+      let startTime: number;
+      const duration = 2000;
+      const step = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        setCount(Math.floor(easeOutQuart * value));
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+  }, [value, isInView]);
 
   return (
-    <div className="flex flex-col">
-      <div className="text-3xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
-        {count}{suffix}
+    <div ref={ref} className="flex flex-col space-y-2 group">
+      <div className="text-4xl lg:text-5xl font-black text-slate-900 group-hover:text-indigo-600 transition-all duration-500 tracking-tighter">
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+        >
+          {count}
+        </motion.span>
+        <span className="text-indigo-500 ml-1">{suffix}</span>
       </div>
-      <div className="text-sm text-slate-500 font-bold uppercase tracking-wider">{label}</div>
+      <div className="text-xs font-black uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-900 transition-colors duration-500">
+        {label}
+      </div>
+      <motion.div 
+        className="h-1 bg-indigo-600 rounded-full origin-left"
+        initial={{ scaleX: 0 }}
+        animate={isInView ? { scaleX: 1 } : {}}
+        transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
+      />
     </div>
   );
 };
 
-export const Hero: React.FC<HeroProps> = ({ onRequestValuation }) => {
+export const Hero: React.FC<HeroProps> = () => {
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 100]);
   const y2 = useTransform(scrollY, [0, 500], [0, -50]);
@@ -78,19 +107,11 @@ export const Hero: React.FC<HeroProps> = ({ onRequestValuation }) => {
                 <span className="text-xs font-bold text-indigo-700 uppercase tracking-widest leading-none">Premium Auto Exchange</span>
               </motion.div>
               
-              <h1 className="text-5xl lg:text-7xl font-extrabold text-slate-900 leading-[1.05] tracking-tight">
-                {headline.split(" ").map((word, i) => (
-                  <motion.span
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: i * 0.1 }}
-                    className="inline-block mr-[0.3em]"
-                  >
-                    {word}
-                  </motion.span>
-                ))}
-              </h1>
+              <SplitText 
+                text={headline} 
+                className="text-5xl lg:text-7xl font-extrabold text-slate-900 leading-[1.05] tracking-tight"
+                stagger={0.08}
+              />
 
               <motion.p 
                 initial={{ opacity: 0 }}
@@ -106,33 +127,31 @@ export const Hero: React.FC<HeroProps> = ({ onRequestValuation }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.5 }}
-              className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 pt-4"
             >
-              <Button
-                onClick={onRequestValuation}
-                size="lg"
-                variant="primary"
-                showGlow
-                className="group"
-              >
-                Request a Valuation
-                <ChevronDown className="ml-2 w-5 h-5 group-hover:translate-y-1 transition-transform" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="lg"
-                onClick={() => onRequestValuation?.('process')}
-                className="group border border-slate-200"
-              >
-                How it works
-                <motion.span 
-                  className="ml-2"
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-10">
+                <Button 
+                  variant="primary" 
+                  size="lg" 
+                  className="w-full sm:w-auto min-w-[200px] text-sm font-extrabold uppercase tracking-[0.2em] shadow-2xl shadow-indigo-500/20"
+                  showGlow
+                  magnetic
+                  data-cursor-text="START"
+                  onClick={() => scrollToSection('contact')}
                 >
-                  →
-                </motion.span>
-              </Button>
+                  Value My Car
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+                <Button 
+                  variant="secondary" 
+                  size="lg" 
+                  className="w-full sm:w-auto min-w-[200px] text-sm font-extrabold uppercase tracking-[0.2em]"
+                  magnetic
+                  data-cursor-text="LEARN"
+                  onClick={() => scrollToSection('process')}
+                >
+                  The Process
+                </Button>
+              </div>
             </motion.div>
 
             <motion.div 
@@ -152,19 +171,21 @@ export const Hero: React.FC<HeroProps> = ({ onRequestValuation }) => {
             className="hidden lg:block relative perspective-1000"
           >
             <div className="absolute -inset-16 bg-gradient-to-tr from-indigo-500/10 via-purple-500/5 to-transparent rounded-full blur-[100px] -z-10 animate-pulse-slow" />
-            <motion.div
-              style={{ y: y2 }}
-              initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
-              className="relative rounded-[2.5rem] overflow-hidden glass p-5 shadow-2xl border-white/40"
-            >
-              <img
-                src="/src/assets/premium_car_hero.png"
-                alt="Premium Car"
-                className="rounded-[2rem] shadow-2xl object-cover w-full h-[650px] scale-105 hover:scale-110 transition-transform duration-[2s]"
-              />
-            </motion.div>
+            <MotionWrapper type="tilt" duration={1.2} delay={0.5}>
+              <motion.div
+                style={{ y: y2 }}
+                initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
+                className="relative rounded-[2.5rem] overflow-hidden glass p-5 shadow-2xl border-white/40"
+              >
+                <img
+                  src="/src/assets/premium_car_hero.png"
+                  alt="Premium Car"
+                  className="rounded-[2rem] shadow-2xl object-cover w-full h-[650px] scale-105 hover:scale-110 transition-transform duration-[2s]"
+                />
+              </motion.div>
+            </MotionWrapper>
           </motion.div>          
         </div>
       </div>

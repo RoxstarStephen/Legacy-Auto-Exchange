@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ChevronDown, Tag } from 'lucide-react';
 import { Card } from '../components/Card';
+import { SplitText } from '../components/SplitText';
 
 const categories = ['All', 'Process', 'Documentation', 'Payment', 'Legal'];
 
@@ -59,16 +60,22 @@ export const FAQ: React.FC = () => {
     <section id="faq" className="bg-transparent py-28 lg:py-40 relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 relative z-10">
         <div className="text-center space-y-4 mb-20">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight"
-          >
-            FAQ
-          </motion.h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Everything you need to know about our professional car exchange process.
-          </p>
+          <div className="space-y-4">
+            <SplitText 
+              text="FAQ" 
+              className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight justify-center"
+            />
+            <motion.div 
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="w-20 h-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 mx-auto rounded-full mb-6 origin-center" 
+            />
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              Everything you need to know about our professional car exchange process.
+            </p>
+          </div>
         </div>
 
         <div className="flex flex-col md:flex-row gap-6 mb-12">
@@ -87,7 +94,7 @@ export const FAQ: React.FC = () => {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-6 py-4 rounded-2xl text-sm font-bold tracking-widest uppercase transition-all whitespace-nowrap ${
+                className={`px-6 py-4 rounded-2xl text-sm font-bold tracking-widest uppercase transition-all whitespace-nowrap active:scale-95 ${
                   activeCategory === cat 
                     ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/10' 
                     : 'bg-white/50 text-slate-500 hover:bg-white border border-slate-100 shadow-sm'

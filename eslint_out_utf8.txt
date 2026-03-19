@@ -1,0 +1,9 @@
+
+D:\Website_Tests\Legacy-Auto-Exchange\src\App.tsx
+  18:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\Website_Tests\Legacy-Auto-Exchange\src\components\Cursor.tsx
+  7:10  error  'cursorVariant' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 2 problems (2 errors, 0 warnings)
+
