@@ -57,14 +57,14 @@ export const Values: React.FC = () => {
             <motion.div 
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 1, delay: 0.5 }}
               className="w-32 h-1 bg-gradient-to-r from-indigo-600 to-violet-600 mx-auto rounded-full origin-center" 
             />
             <motion.p 
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 1, delay: 0.8 }}
               className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto font-medium leading-relaxed"
             >

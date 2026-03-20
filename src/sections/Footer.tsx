@@ -24,10 +24,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <ul className="space-y-4">
               {['Chennai', 'Coimbatore', 'Madurai', 'Salem', 'Trichy'].map(city => (
                 <li key={city}>
-                  <div className="text-slate-400 flex items-center">
-                    <span className="w-1 h-1 bg-indigo-500 rounded-full mr-3" />
-                    {city}
-                  </div>
+                  <div className="text-slate-400">{city}</div>
                 </li>
               ))}
             </ul>
@@ -43,7 +40,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <button onClick={() => onNavigate?.('values')} className="text-slate-400 hover:text-indigo-400 transition-colors duration-300 uppercase text-xs font-bold tracking-widest">Our Values</button>
               </li>
               <li>
-                <button onClick={() => onNavigate?.('contact')} className="text-slate-400 hover:text-indigo-400 transition-colors duration-300 uppercase text-xs font-bold tracking-widest">Get Quote</button>
+                <button onClick={() => onNavigate?.('valuation-form')} className="text-slate-400 hover:text-indigo-400 transition-colors duration-300 uppercase text-xs font-bold tracking-widest">Get Quote</button>
               </li>
             </ul>
           </div>

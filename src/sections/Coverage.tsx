@@ -28,6 +28,7 @@ export const Coverage: React.FC = () => {
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
                 className="space-y-4"
               >
                 <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg">
@@ -40,6 +41,7 @@ export const Coverage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
+                viewport={{ once: true, amount: 0.2 }}
                 className="space-y-4"
               >
                 <div className="w-12 h-12 bg-violet-600 rounded-2xl flex items-center justify-center text-white shadow-lg">
@@ -51,7 +53,7 @@ export const Coverage: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative max-w-full overflow-hidden">
             <InteractiveMap />
             {/* Decorative elements */}
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/10 blur-[80px] rounded-full" />

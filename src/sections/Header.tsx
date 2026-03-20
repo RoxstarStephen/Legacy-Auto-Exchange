@@ -93,7 +93,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
             showGlow
             magnetic
             data-cursor-text="QUOTE"
-            onClick={() => onNavigate('contact')}
+            onClick={() => onNavigate('valuation-form')}
           >
             Get Quote
           </Button>
@@ -122,8 +122,9 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                 <button
                   key={item.id}
                   onClick={() => {
-                    onNavigate(item.id);
                     setMobileMenuOpen(false);
+                    // Wait a tick so the fixed header/layout settles before Lenis starts.
+                    window.setTimeout(() => onNavigate(item.id), 50);
                   }}
                   className="block w-full text-left py-2 text-lg font-bold text-slate-900"
                 >
@@ -131,7 +132,14 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                 </button>
               ))}
               <div className="pt-4 flex items-center justify-between">
-                <Button onClick={() => onNavigate('contact')}>Get Quote</Button>
+                <Button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    window.setTimeout(() => onNavigate('valuation-form'), 50);
+                  }}
+                >
+                  Get Quote
+                </Button>
               </div>
             </div>
           </motion.div>

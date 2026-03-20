@@ -1,9 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { Search, ClipboardCheck, Wallet, FileCheck, LucideIcon } from 'lucide-react';
 import {
   motion,
   AnimatePresence,
   useScroll,
+  useMotionValueEvent,
 } from 'framer-motion';
 import { SplitText } from '../components/SplitText';
 
@@ -102,6 +103,8 @@ const StepCard: React.FC<{
       animate={{ opacity: 1, y: 0,     scale: 1    }}
       exit   ={{ opacity: 0, y: exitY,  scale: 0.98 }}
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      // Improves perceived smoothness during frequent card swaps on mobile.
+      style={{ willChange: 'transform, opacity' }}
       className="absolute inset-0 flex flex-col justify-center p-8 lg:p-16 bg-white rounded-[2rem] lg:rounded-[4rem] shadow-[-10px_20px_40px_rgba(0,0,0,0.07)] lg:shadow-[-20px_40px_80px_rgba(0,0,0,0.09)] border border-slate-100/60"
     >
       <div
@@ -132,34 +135,19 @@ export const Process: React.FC = () => {
     offset: ['start start', 'end end'],
   });
 
-  // Use a rAF loop to read scroll progress every frame.
-  // This is immune to React batching and AnimatePresence blocking,
-  // so no step is ever skipped even on very fast scroll.
-  useEffect(() => {
-    let rafId: number;
-    let lastIndex = 0;
-
-    const update = () => {
-      const latest = scrollYProgress.get();
-      const next = Math.min(
-        steps.length - 1,
-        Math.floor(latest * steps.length)
-      );
-      if (next !== lastIndex) {
-        setDirection(next > lastIndex ? 1 : -1);
-        setActiveIndex(next);
-        lastIndex = next;
-      }
-      rafId = requestAnimationFrame(update);
-    };
-
-    rafId = requestAnimationFrame(update);
-    return () => cancelAnimationFrame(rafId);
-  }, [scrollYProgress]);
+  const lastIndexRef = useRef(0);
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    const next = Math.min(steps.length - 1, Math.floor(latest * steps.length));
+    if (next !== lastIndexRef.current) {
+      setDirection(next > lastIndexRef.current ? 1 : -1);
+      setActiveIndex(next);
+      lastIndexRef.current = next;
+    }
+  });
 
   return (
-    <section id="process" ref={containerRef} className="relative min-h-[400vh] pb-32">
-      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+    <section id="process" ref={containerRef} className="relative min-h-[400svh] pb-32">
+      <div className="sticky top-0 h-[100svh] flex flex-col justify-center overflow-hidden">
 
         {/* Background watermark */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.03]">

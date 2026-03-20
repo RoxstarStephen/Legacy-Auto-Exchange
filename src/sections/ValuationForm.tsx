@@ -62,6 +62,7 @@ export const ValuationForm: React.FC = () => {
                   initial={{ opacity: 0, scale: 0.9, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 1.1 }}
+                  id="valuation-form"
                   className="py-20 text-center space-y-8"
                 >
                   <motion.div 
@@ -113,7 +114,7 @@ export const ValuationForm: React.FC = () => {
                       </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-8 py-2">
+                    <form id="valuation-form" onSubmit={handleSubmit} className="lg:col-span-3 space-y-8 py-2">
                       <div className="grid md:grid-cols-2 gap-6">
                         <Input
                           label="Make & Model"

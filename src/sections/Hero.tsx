@@ -7,7 +7,8 @@ import { MotionWrapper } from '../components/MotionWrapper';
 import premiumCarHero from '../assets/premium_car_hero.png';
 
 interface HeroProps {
-  onRequestValuation?: (id?: string) => void;
+  // Shared CTA navigation (Lenis-based) provided by App.
+  onNavigate?: (id: string) => void;
 }
 
 import { useInView } from 'framer-motion';
@@ -59,13 +60,7 @@ const StatCounter: React.FC<{ value: number; label: string; suffix?: string }> =
   );
 };
 
-export const Hero: React.FC<HeroProps> = () => {
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 100]);
   const y2 = useTransform(scrollY, [0, 500], [0, -50]);
@@ -138,7 +133,7 @@ export const Hero: React.FC<HeroProps> = () => {
                   showGlow
                   magnetic
                   data-cursor-text="START"
-                  onClick={() => scrollToSection('contact')}
+                  onClick={() => onNavigate?.('valuation-form')}
                 >
                   Value My Car
                   <ArrowRight className="ml-2 w-5 h-5" />
@@ -149,7 +144,7 @@ export const Hero: React.FC<HeroProps> = () => {
                   className="w-full sm:w-auto min-w-[200px] text-sm font-extrabold uppercase tracking-[0.2em]"
                   magnetic
                   data-cursor-text="LEARN"
-                  onClick={() => scrollToSection('process')}
+                  onClick={() => onNavigate?.('process')}
                 >
                   The Process
                 </Button>

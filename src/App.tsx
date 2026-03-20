@@ -32,7 +32,7 @@ const Particle: React.FC<{
       transition={{
         duration: p.duration,
         repeat: Infinity,
-        ease: "linear",
+        ease: [0.22, 1, 0.36, 1],
         delay: p.delay
       }}
       className="absolute border border-indigo-400/20 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.1)] w-4 h-4"
@@ -47,7 +47,9 @@ const BackgroundEffects = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.4, 1, 1, 0.4]);
 
   // Static positions for particles to avoid re-renders with Math.random
-  const particles = useRef([...Array(15)].map(() => ({
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const particleCount = isMobile ? 8 : 15;
+  const particles = useRef([...Array(particleCount)].map(() => ({
     top: `${Math.random() * 100}%`,
     left: `${Math.random() * 100}%`,
     size: Math.floor(Math.random() * 3) + 2,
@@ -107,7 +109,25 @@ function App() {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el && lenisRef.current) {
-      lenisRef.current.scrollTo(el, { offset: -80 });
+      const headerEl = document.querySelector('header');
+      const headerHeight = headerEl?.getBoundingClientRect().height ?? 80;
+
+      // Special-case the valuation form so the CTA ends near the bottom of the
+      // viewport without being clipped (mobile-focused).
+      if (id === 'valuation-form') {
+        const bottomPadding = 24; // space so the card edge isn't flush-clipped
+        const rect = el.getBoundingClientRect();
+        const targetY = (window.scrollY + rect.bottom) - (window.innerHeight - bottomPadding);
+        const clamped = Math.max(0, targetY);
+        lenisRef.current.scrollTo(clamped);
+        return;
+      }
+
+      lenisRef.current.scrollTo(el, {
+        offset: -headerHeight,
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
     }
   };
 
@@ -122,7 +142,7 @@ function App() {
       <BackgroundEffects />
       <Header onNavigate={scrollTo} />
       <main className="relative pt-[80px]">
-        <Hero />
+        <Hero onNavigate={scrollTo} />
         <Process />
         <Coverage />
         <Values />
