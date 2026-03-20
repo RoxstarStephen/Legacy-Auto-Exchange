@@ -1,11 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Search, ClipboardCheck, Wallet, FileCheck, LucideIcon } from 'lucide-react';
 import {
   motion,
   AnimatePresence,
   useScroll,
-  useTransform,
-  useMotionValueEvent,
 } from 'framer-motion';
 import { SplitText } from '../components/SplitText';
 
@@ -95,15 +93,15 @@ const StepCard: React.FC<{
 }> = ({ step, direction }) => {
   const Icon = step.icon;
 
-  const enterY  = direction >= 0 ? 70  : -70;
-  const exitY   = direction >= 0 ? -50 : 50;
+  const enterY  = direction >= 0 ? 40  : -40;
+  const exitY   = direction >= 0 ? -30 : 30;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: enterY, scale: 0.96 }}
+      initial={{ opacity: 0, y: enterY, scale: 0.97 }}
       animate={{ opacity: 1, y: 0,     scale: 1    }}
-      exit   ={{ opacity: 0, y: exitY,  scale: 0.97 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      exit   ={{ opacity: 0, y: exitY,  scale: 0.98 }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       className="absolute inset-0 flex flex-col justify-center p-8 lg:p-16 bg-white rounded-[2rem] lg:rounded-[4rem] shadow-[-10px_20px_40px_rgba(0,0,0,0.07)] lg:shadow-[-20px_40px_80px_rgba(0,0,0,0.09)] border border-slate-100/60"
     >
       <div
@@ -134,20 +132,30 @@ export const Process: React.FC = () => {
     offset: ['start start', 'end end'],
   });
 
-  // Map scroll progress → active step index
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    const next = Math.min(
-      steps.length - 1,
-      Math.floor(latest * steps.length)
-    );
-    if (next !== activeIndex) {
-      setDirection(next > activeIndex ? 1 : -1);
-      setActiveIndex(next);
-    }
-  });
+  // Use a rAF loop to read scroll progress every frame.
+  // This is immune to React batching and AnimatePresence blocking,
+  // so no step is ever skipped even on very fast scroll.
+  useEffect(() => {
+    let rafId: number;
+    let lastIndex = 0;
 
-  const bgScale   = useTransform(scrollYProgress, [0, 1], [1, 2]);
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
+    const update = () => {
+      const latest = scrollYProgress.get();
+      const next = Math.min(
+        steps.length - 1,
+        Math.floor(latest * steps.length)
+      );
+      if (next !== lastIndex) {
+        setDirection(next > lastIndex ? 1 : -1);
+        setActiveIndex(next);
+        lastIndex = next;
+      }
+      rafId = requestAnimationFrame(update);
+    };
+
+    rafId = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(rafId);
+  }, [scrollYProgress]);
 
   return (
     <section id="process" ref={containerRef} className="relative min-h-[400vh] pb-32">
@@ -155,12 +163,9 @@ export const Process: React.FC = () => {
 
         {/* Background watermark */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.03]">
-          <motion.h2
-            style={{ scale: bgScale, opacity: bgOpacity }}
-            className="text-[30vw] font-black tracking-tighter text-slate-900"
-          >
+          <h2 className="text-[30vw] font-black tracking-tighter text-slate-900">
             LEGACY
-          </motion.h2>
+          </h2>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
@@ -192,7 +197,12 @@ export const Process: React.FC = () => {
 
             {/* Right: animated card swap */}
             <div className="relative h-[450px] lg:h-[600px]">
-              <AnimatePresence mode="wait" custom={direction}>
+              {/*
+                mode="sync": new card enters immediately without waiting for
+                the exit animation to finish. This prevents cards from being
+                skipped on fast scroll — the enter is never blocked.
+              */}
+              <AnimatePresence mode="sync" custom={direction}>
                 <StepCard
                   key={activeIndex}
                   step={steps[activeIndex]}
