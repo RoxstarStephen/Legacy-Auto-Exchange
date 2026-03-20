@@ -123,7 +123,8 @@ export const Button: React.FC<ButtonProps> = ({
         <span className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 blur-xl opacity-0 hover:opacity-100 transition-opacity duration-500" />
       )}
       <motion.span 
-        className="relative z-10"
+        // Keep label text and any inline icon children on the same row (mobile-friendly).
+        className="relative z-10 inline-flex items-center flex-nowrap"
         style={{
           x: magnetic ? spanMoveX : 0,
           y: magnetic ? spanMoveY : 0,
