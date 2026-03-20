@@ -4,6 +4,7 @@ import { Button } from '../components/Button';
 import { ArrowRight } from 'lucide-react';
 import { SplitText } from '../components/SplitText';
 import { MotionWrapper } from '../components/MotionWrapper';
+import premiumCarHero from '../assets/premium_car_hero.png';
 
 interface HeroProps {
   onRequestValuation?: (id?: string) => void;
@@ -181,7 +182,7 @@ export const Hero: React.FC<HeroProps> = () => {
                 className="relative rounded-[2.5rem] overflow-hidden glass p-5 shadow-2xl border-white/40"
               >
                 <img
-                  src="/src/assets/premium_car_hero.png"
+                  src={premiumCarHero}
                   alt="Premium Car"
                   className="rounded-[2rem] shadow-2xl object-cover w-full h-[650px] scale-105 hover:scale-110 transition-transform duration-[2s]"
                 />

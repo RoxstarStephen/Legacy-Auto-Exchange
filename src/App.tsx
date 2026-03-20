@@ -10,7 +10,6 @@ import { Testimonials } from './sections/Testimonials';
 import { FAQ } from './sections/FAQ';
 import { Footer } from './sections/Footer';
 import { Cursor } from './components/Cursor';
-import { ActivityTicker } from './components/ActivityTicker';
 import { useScroll, useTransform, motion, MotionValue } from 'framer-motion';
 
 const Particle: React.FC<{
@@ -122,8 +121,7 @@ function App() {
       <Cursor />
       <BackgroundEffects />
       <Header onNavigate={scrollTo} />
-      <ActivityTicker />
-      <main className="relative">
+      <main className="relative pt-[80px]">
         <Hero />
         <Process />
         <Coverage />
