@@ -24,14 +24,14 @@ export const FAQ: React.FC = () => {
       category: 'Process',
       question: 'How long does the process take?',
       answer:
-        'After the initial valuation, the sale and payment can be finalized quickly, often within a single meeting if all documents are ready. The RTO transfer typically takes 7-10 business days after the sale is finalized.',
+        'After the initial valuation, the sale and payment can be finalized quickly, often within a single meeting if all documents are ready. The RTO transfer is not completed at the moment we purchase your vehicle—it is processed once we have secured a buyer for the car. From that point, the transfer typically takes 7-10 business days.',
     },
     {
       id: '3',
       category: 'Legal',
       question: 'How is the RTO transfer handled?',
       answer:
-        'We take full responsibility for the documentation. Once the sale is finalized, we provide you with the delivery note and track the RC transfer status on your behalf with the local RTO office.',
+        'We take full responsibility for the documentation. Once a buyer is secured for your vehicle, we provide you with the delivery note and track the RC transfer status on your behalf with the local RTO office.',
     },
     {
       id: '4',
