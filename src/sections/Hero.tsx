@@ -131,7 +131,6 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                   size="lg" 
                   className="w-full sm:w-auto min-w-[200px] text-sm font-extrabold uppercase tracking-[0.2em] shadow-2xl shadow-indigo-500/20"
                   showGlow
-                  magnetic
                   data-cursor-text="START"
                   onClick={() => onNavigate?.('valuation-form')}
                 >
@@ -142,7 +141,6 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                   variant="secondary" 
                   size="lg" 
                   className="w-full sm:w-auto min-w-[200px] text-sm font-extrabold uppercase tracking-[0.2em]"
-                  magnetic
                   data-cursor-text="LEARN"
                   onClick={() => onNavigate?.('process')}
                 >

@@ -179,7 +179,6 @@ export const ValuationForm: React.FC = () => {
                         fullWidth
                         disabled={isLoading}
                         showGlow
-                        magnetic
                         data-cursor-text="SEND"
                         className="h-16 text-sm font-extrabold uppercase tracking-[0.2em]"
                       >

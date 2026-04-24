@@ -3,7 +3,7 @@
 This plan outlines the "Art of Polish" phase, transforming the current premium site into a world-class digital experience through immersive motion, advanced typography, and interactive data storytelling.
 
 ## 1. Immersive Motion & Depth [x]
-- [x] Implement Magnetic Interaction for all primary buttons (Button.tsx)
+- [ ] Implement Magnetic Interaction for all primary buttons (Button.tsx) [REMOVED]
 - [x] Add multi-layered Parallax effects to BackgroundEffects (App.tsx)
 - [x] Create staggered "Split-Text" entrance animations for Section Titles
 - [x] Implement smooth 3D perspective tilts for main Image Containers

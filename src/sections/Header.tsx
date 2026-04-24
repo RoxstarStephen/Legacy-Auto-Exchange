@@ -91,7 +91,6 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
             variant="primary" 
             size="md" 
             showGlow
-            magnetic
             data-cursor-text="QUOTE"
             onClick={() => onNavigate('valuation-form')}
           >

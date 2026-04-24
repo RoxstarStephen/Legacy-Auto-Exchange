@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { useSound } from '../hooks/useSound';
 
 interface ButtonProps {
@@ -12,7 +12,6 @@ interface ButtonProps {
   fullWidth?: boolean;
   className?: string;
   showGlow?: boolean;
-  magnetic?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -25,43 +24,9 @@ export const Button: React.FC<ButtonProps> = ({
   fullWidth = false,
   className = '',
   showGlow = false,
-  magnetic = true,
 }) => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const { playHoverSound, playClickSound } = useSound();
   
-  // Magnetic effect values
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 15, stiffness: 150, mass: 0.1 };
-  const springX = useSpring(mouseX, springConfig);
-  const springY = useSpring(mouseY, springConfig);
-
-  const moveX = useTransform(springX, (val) => val * 0.35);
-  const moveY = useTransform(springY, (val) => val * 0.35);
-  
-  const spanMoveX = useTransform(springX, (val) => val * 0.1);
-  const spanMoveY = useTransform(springY, (val) => val * 0.1);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!magnetic || disabled || !buttonRef.current) return;
-    
-    const { clientX, clientY } = e;
-    const { left, top, width, height } = buttonRef.current.getBoundingClientRect();
-    
-    const center = { x: left + width / 2, y: top + height / 2 };
-    const distance = { x: clientX - center.x, y: clientY - center.y };
-    
-    mouseX.set(distance.x);
-    mouseY.set(distance.y);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
-
   const baseStyles = 'relative font-medium rounded-xl transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center justify-center overflow-hidden';
 
   const variantStyles = {
@@ -82,22 +47,15 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <motion.button
-      ref={buttonRef}
       type={type}
       onClick={() => {
         if (!disabled) playClickSound();
         if (onClick) onClick();
       }}
-      onMouseMove={handleMouseMove}
       onMouseEnter={() => {
         if (!disabled) playHoverSound();
       }}
-      onMouseLeave={handleMouseLeave}
       disabled={disabled}
-      style={{
-        x: magnetic ? moveX : 0,
-        y: magnetic ? moveY : 0,
-      }}
       whileHover={!disabled ? { scale: 1.02 } : {}}
       whileTap={!disabled ? { scale: 0.98, transition: { type: "spring", stiffness: 400, damping: 10 } } : {}}
       className={`
@@ -125,13 +83,10 @@ export const Button: React.FC<ButtonProps> = ({
       <motion.span 
         // Keep label text and any inline icon children on the same row (mobile-friendly).
         className="relative z-10 inline-flex items-center flex-nowrap"
-        style={{
-          x: magnetic ? spanMoveX : 0,
-          y: magnetic ? spanMoveY : 0,
-        }}
       >
         {children}
       </motion.span>
     </motion.button>
   );
 };
+
